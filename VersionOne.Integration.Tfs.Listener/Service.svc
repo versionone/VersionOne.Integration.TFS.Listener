@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="VersionOne.Integration.Tfs.Listener.Service" CodeBehind="Service.svc.cs" %>

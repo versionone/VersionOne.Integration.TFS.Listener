@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+	<Fragment>
+    <ComponentGroup Id="TFSListenerSite">
+      <ComponentRef Id="SiteRoot"/>
+      <ComponentRef Id="SiteBin"/>
+    </ComponentGroup>
+
+    <DirectoryRef Id="WebDir" FileSource ="$(var.VersionOne.Integration.Tfs.Listener.ProjectDir)">
+      <Component Id="SiteRoot" Guid="{8FBC348B-7DCE-451D-970E-319930C89B72}">
+        <File Id="WebConfig" Name="Web.config"/>
+        <File Id="ServiceSVC" Name="Service.svc"/>
+        <File Id="ErrorTestAspx" Name="ErrorTest.aspx"/>
+        <File Id="GlobalASAX" Name="Global.asax" Source ="$(var.VersionOne.Integration.Tfs.Listener.ProjectDir)" />
+      </Component>
+      <Directory Id="WebDir_Bin" Name="bin" FileSource="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)">
+        <Component Id="SiteBin" Guid="{B61F8CA4-457D-423D-AC00-667F525ABA6B}">
+          <File Id="VersionOneTfsListenerDLL" Name="VersionOne.Integration.Tfs.Listener.dll"/>
+          <File Id="SiteVersionOneSDKAPIClientDLL" Name="VersionOne.SDK.APIClient.dll"/>
+          <File Id="SiteVersionOneServerConnectorDLL" Name="VersionOne.ServerConnector.dll"/>
+          <File Id="FSharp.Data_SiteBin" Name="FSharp.Data.dll"/>
+          <File Id="OAuth2Client_SiteBin" Name="OAuth2Client.dll"/>
+          <File Id="VersionOne.Parsers_SiteBin" Name="VersionOne.Parsers.dll"/>
+          <File Id="VersionOneServiceHostCoreDLL_SiteBin" Name="VersionOne.ServiceHost.Core.dll"/>
+          <File Id="log4net" Name="log4net.dll"/>
+          <File Id="Elmah" Name="Elmah.dll"/>
+          <File Id="VersionOneTfsCore_SiteBinDLL" Name="VersionOne.Integration.Tfs.Core.dll" />
+          <File Id="NewtonsoftJson" Name="NewtonSoft.Json.dll" />
+          <File Id="SystemWebHttp" Name="System.Web.Http.dll" />
+          <File Id="SystemWebHttpWebhost" Name="System.Web.Http.WebHost.dll" />
+          <File Id="SystemNetHttpFormatting" Name="System.Net.Http.Formatting.dll" />
+          <File Id="MicrosoftWebInfrastructure" Name="Microsoft.Web.Infrastructure.dll" />
+          <File Id="SystemWebMvc" Name="System.Web.Mvc.dll" />
+          <File Id="SystemWebWebPagesRazor" Name="System.Web.WebPages.Razor.dll" />
+          <File Id="SystemWebWebPages" Name="System.Web.WebPages.dll" />
+          <File Id="SystemNetHttp" Name="System.Net.Http.dll" />
+          <File Id="SystemWebWebPagesDeployment" Name="System.Web.WebPages.Deployment.dll" />
+        </Component>
+      </Directory>
+    </DirectoryRef>
+	</Fragment>
+</Wix>

@@ -1,0 +1,8 @@
+{
+    "solution": "VersionOne.Integration.Tfs.Listener.sln",
+    "nugetSources": "http://packages.nuget.org/api/v2/;http://www.myget.org/F/versionone/api/v2/",
+    "configuration": "Debug",
+    "platform": "Any CPU",
+    "organizationName": "VersionOne, Inc.",    
+    "version" : "4.0.1.0"
+}

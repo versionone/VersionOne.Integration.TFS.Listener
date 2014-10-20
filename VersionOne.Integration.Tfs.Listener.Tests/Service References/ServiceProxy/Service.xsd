@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.microsoft.com/TeamFoundation/2005/06/Services/Notification/03" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/TeamFoundation/2005/06/Services/Notification/03" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Notify">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" name="eventXml" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="1" name="tfsIdentityXml" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NotifyResponse">
+    <xs:complexType />
+  </xs:element>
+</xs:schema>

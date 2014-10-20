@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension">
+
+  <?include $(sys.CURRENTDIR)\Config.wxi ?>
+
+  <Product Name="VersionOne TFS Listener"
+           Version="3.0.1"
+           Manufacturer="VersionOne"
+           Id="70439564-5E37-4B38-AEF4-91D86F50B282"
+           UpgradeCode="003F3FE8-9A6D-445F-9ACB-5479FAD77A7D"
+           Language="1033" >
+
+    <Package Id="*" Keywords="Installer"
+             Description="$(var.ProductName)"
+             Manufacturer="VersionOne"
+             InstallerVersion="200" Compressed="yes"
+             InstallPrivileges="elevated"
+             InstallScope="perMachine" />
+
+    <Condition Message="You need to be an administrator to install this product.">Privileged</Condition>
+
+    <Icon Id="icon.ico" SourceFile="logo.ico" />
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <iis:WebAppPool Id="NET_45" Name=".NET v4.5" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="$(var.PlatformProgramFilesFolder)">
+        <Directory Id="VersionOne" Name="VersionOne">
+          <Directory Id="INSTALLLOCATION" Name="TFSListener">
+            <Component Id="TFSListenerConfig" Guid="C2D48FB6-AA6D-4057-9C61-4506CDD2F521">
+              <File Id="VersionOneTFSServerConfigEXE"
+                    Name="VersionOne.Integration.Tfs.Listener.Config.exe"
+                    Source="$(var.VersionOne.Integration.Tfs.Listener.Config.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="yes" >
+                <Shortcut Id="desktopConfig" Directory="DesktopFolder" Name="Configure VersionOne Listener"
+                          Advertise="yes" Icon="icon.ico" />
+                <Shortcut Id="startMenuConfigConfig" Directory="ProgramMenuDir" Name="Configure VersionOne Listener"
+                          Advertise="yes" Icon="icon.ico" />
+              </File>
+            </Component>
+            <Component Id="VersionOneSDKAPIClient" Guid="D871A7A4-626E-45B0-A871-6E72783E4866">
+              <File Id="VersionOneSDKAPIClientDLL"
+                    Name="VersionOne.SDK.APIClient.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="yes" />
+            </Component>
+            <Component Id="VersionOneTFSDataLayer" Guid="D79297A6-B819-4065-81D4-FAC039CA702E">
+              <File Id="VersionOneServerConnectorDLL"
+                    Name="VersionOne.ServerConnector.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />
+              <File Id="VersionOneServiceHostCoreDLL"
+                    Name="VersionOne.ServiceHost.Core.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />
+              <File Id="Log4NetDLL"
+                    Name="log4net.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />
+              <File Id="VersionOneIntegrationTfsCoreDLL"
+                    Name="VersionOne.Integration.Tfs.Core.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />
+              <File Id="NewtonSoft.Json"
+                    Name="NewtonSoft.Json.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />             
+              <File Id="FSharp.Data"
+                    Name="FSharp.Data.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />
+              <File Id="OAuth2Client"
+                    Name="OAuth2Client.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />
+              <File Id="VersionOne.Parsers"
+                    Name="VersionOne.Parsers.dll"
+                    Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
+                    DiskId="1" Vital="yes" KeyPath="no" />
+            </Component>
+            <Directory Id="WebDir" Name="web">
+              <Component Id="ListenerWebSite" Guid="82E0F77A-ABBE-4247-A36D-468276FFFAB3">
+                <CreateFolder />
+                <iis:WebSite Id="TFSListenerSite" AutoStart="yes" Description="VersionOne TFS Listener"
+                             Directory="WebDir">
+                  <iis:WebAddress Id='AllUnassigned' Port='[LISTEN_PORT]' />
+                  <iis:WebApplication Id='TFSListenerApp' WebAppPool='NET_45' Name='TFS Listener App' />
+                </iis:WebSite>
+              </Component>
+              
+              <Directory Id="AppData" Name="App_Data">
+                <Component Id="AppData"  Guid="c97386c2-e8b5-4f4e-a25b-94f770e7bebf">
+                  <CreateFolder>
+                    <Permission User="Everyone" GenericAll="yes" />
+                  </CreateFolder>
+                </Component>
+                <Directory Id="ElmahErrorLogs" Name="ElmahErrorLogs">
+                  <Component Id="ElmahErrorLogs"  Guid="0476021d-25b7-4e08-8cb3-d52c306d74c2">
+                    <CreateFolder>
+                      <Permission User="Everyone" GenericAll="yes" />
+                    </CreateFolder>
+                  </Component>
+                </Directory>
+                <Directory Id="ServiceTraceLogs" Name="ServiceTraceLogs">
+                  <Component Id="ServiceTraceLogs"  Guid="f9258ddf-dfdd-483d-b6ec-346c429c439b">
+                    <CreateFolder>
+                      <Permission User="Everyone" GenericAll="yes" />
+                    </CreateFolder>
+                  </Component>
+                </Directory>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="VersionOne">
+          <Component Id="ProgramMenuDir" Guid="2582AF23-23C7-4616-8240-7C5E96D5463E">
+            <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+            <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="DesktopFolder" Name="Desktop" />
+    </Directory>
+    <Feature Id="Complete" Title="$(var.ProductName)"
+             Description="Install $(var.ProductName)"
+             Display="expand"
+             ConfigurableDirectory="INSTALLLOCATION"
+             Level="1" >
+      <ComponentRef Id="VersionOneSDKAPIClient" />
+      <ComponentRef Id="VersionOneTFSDataLayer" />
+      <ComponentRef Id="TFSListenerConfig" />
+      <ComponentRef Id="ProgramMenuDir" />
+      <ComponentGroupRef Id="TFSListenerSite" />
+      <ComponentRef Id="ListenerWebSite" />
+      <ComponentRef Id="AppData" />
+      <ComponentRef Id="ElmahErrorLogs" />
+      <ComponentRef Id="ServiceTraceLogs" />
+    </Feature>
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    <UI Id="TFSListen_Install_UI">
+      <UIRef Id="WixUI_InstallDir" />
+      <DialogRef Id="PortSelectDialog" />
+      <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="PortSelectDialog" Order="4">1</Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="PortSelectDialog">1</Publish>
+    </UI>
+
+  </Product>
+</Wix>
