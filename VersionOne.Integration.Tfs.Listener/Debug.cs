@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using VersionOne.Integration.Tfs.Core.Security;
 using VersionOne.Integration.Tfs.Core.DataLayer;
 
 namespace VersionOne.Integration.Tfs.Listener {
@@ -25,7 +26,7 @@ namespace VersionOne.Integration.Tfs.Listener {
         {
             get
             {
-                var config = new ConfigurationProxy().Retrieve();
+                var config = new ConfigurationProxy().Retrieve(ProtectData.Unprotect);
                 return config.DebugMode;
             }
         }

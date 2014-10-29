@@ -12,6 +12,7 @@ using VersionOne.Integration.Tfs.Core.DTO;
 using VersionOne.Integration.Tfs.Core.Extensions;
 using VersionOne.Integration.Tfs.Core.Structures;
 using VersionOne.Integration.Tfs.Core.DataLayer;
+using VersionOne.Integration.Tfs.Core.Security;
 using Environment = System.Environment;
 
 namespace VersionOne.Integration.Tfs.Listener.Config
@@ -105,7 +106,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
 
             try
             {
-                tfsConfig = proxy.Retrieve();
+                tfsConfig = proxy.Retrieve(ProtectData.Unprotect);
             }
             catch (Exception e)
             {
@@ -226,7 +227,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 Cursor.Current = Cursors.WaitCursor;
 
                 var proxy = new ConfigurationProxy();
-                var config = proxy.Retrieve();
+                var config = proxy.Retrieve(ProtectData.Unprotect);
 
                 config.TfsUrl = TFSURLTB.Text;
                 config.TfsUserName = TFSUsernameTB.Text;
@@ -260,7 +261,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 Cursor.Current = Cursors.WaitCursor;
 
                 var proxy = new ConfigurationProxy();
-                var config = proxy.Retrieve();
+                var config = proxy.Retrieve(ProtectData.Unprotect);
 
                 config.TfsUrl = ListenerURLTB.Text;
                 proxy.Store(config);

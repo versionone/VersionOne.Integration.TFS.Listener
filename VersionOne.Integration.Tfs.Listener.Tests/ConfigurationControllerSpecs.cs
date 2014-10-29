@@ -17,7 +17,7 @@ namespace VersionOne.Integration.Tfs.Listener.Tests
                     it["then valid json is returned"] = () => config.should_not_be(null);
                 };
         }
-
+        
         public void given_settings_are_being_sent_to_the_controller()
         {
 

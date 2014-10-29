@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
-using VersionOne.Integration.Tfs.Listener.ModelBinders;
-using System.Linq;
-using VersionOne.Integration.Tfs.Core.DTO;
-using VersionOne.Integration.Tfs.Core.DataLayer.Providers;
-using VersionOne.Integration.Tfs.Core.DataLayer.Collections;
-using VersionOne.Integration.Tfs.Core.Structures;
 using VersionOne.Integration.Tfs.Core.Adapters;
 using VersionOne.Integration.Tfs.Core.DataLayer;
+using VersionOne.Integration.Tfs.Core.DataLayer.Collections;
+using VersionOne.Integration.Tfs.Core.DataLayer.Providers;
+using VersionOne.Integration.Tfs.Core.DTO;
+using VersionOne.Integration.Tfs.Core.Structures;
+using VersionOne.Integration.Tfs.Core.Security;
+using VersionOne.Integration.Tfs.Listener.ModelBinders;
 
 namespace VersionOne.Integration.Tfs.Listener
 {
@@ -17,10 +19,9 @@ namespace VersionOne.Integration.Tfs.Listener
     {
         // GET <controller>
         [HttpGet]
-        public TfsServerConfiguration Get()
+        public string Get()
         {
-
-            var configProvider = new ConfigurationProvider();
+            var configProvider = new ConfigurationProvider(ProtectData.Unprotect);
 
             var config = new TfsServerConfiguration
                 {
@@ -44,9 +45,9 @@ namespace VersionOne.Integration.Tfs.Listener
                 config.ProxyUsername = configProvider.ProxySettings.Username;
                 config.ProxyPassword = configProvider.ProxySettings.Password;
             }
-        
-            return config;
 
+            var json = JsonConvert.SerializeObject(config);
+            return ProtectData.Protect(json);
         }
 
         //POST <controller>
@@ -77,7 +78,7 @@ namespace VersionOne.Integration.Tfs.Listener
 
             var returnValue = enumerable.ToDictionary(x => x.Key, x => x.Value);
             returnValue.Add(StatusKey.Status, returnValue.Count == 0 ? StatusCode.Ok : StatusCode.Exception);
-            if (returnValue[StatusKey.Status] == StatusCode.Ok) SettingsFileAdapter.SaveSettings(configToSave, Paths.ConfigurationDirectory, Paths.ConfigurationFileName);
+            if (returnValue[StatusKey.Status] == StatusCode.Ok) SettingsFileAdapter.SaveSettings(configToSave, Paths.ConfigurationDirectory, Paths.ConfigurationFileName, ProtectData.Protect);
             
             return returnValue;
         }

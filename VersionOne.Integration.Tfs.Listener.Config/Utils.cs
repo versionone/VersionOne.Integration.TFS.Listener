@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using Microsoft.TeamFoundation.Client;
 using VersionOne.Integration.Tfs.Core.DataLayer;
+using VersionOne.Integration.Tfs.Core.Security;
 
 namespace VersionOne.Integration.Tfs.Listener.Config {
     /// <summary>
@@ -12,7 +13,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config {
         public static TfsTeamProjectCollection ConnectToTFS()
         {
 
-            var config = new ConfigurationProxy().Retrieve();
+            var config = new ConfigurationProxy().Retrieve(ProtectData.Unprotect);
             var user = config.TfsUserName;
             var domain = string.Empty;
             var pos = config.TfsUserName.IndexOf('\\');
