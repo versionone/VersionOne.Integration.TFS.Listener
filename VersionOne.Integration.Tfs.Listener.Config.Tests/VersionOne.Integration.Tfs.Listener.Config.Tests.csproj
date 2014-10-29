@@ -72,8 +72,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VersionOne.Integration.Tfs.Core">
-      <HintPath>..\packages\VersionOne.Integration.Tfs.Core.1.0.0.0\lib\net451\VersionOne.Integration.Tfs.Core.dll</HintPath>
+    <Reference Include="VersionOne.Integration.Tfs.Core, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\VersionOne.Integration.Tfs.Core.1.0.1.0\lib\net451\VersionOne.Integration.Tfs.Core.dll</HintPath>
     </Reference>
     <Reference Include="VersionOne.Parsers">
       <HintPath>..\packages\VersionOne.Parsers.1.1.14195.67\lib\net45\VersionOne.Parsers.dll</HintPath>
