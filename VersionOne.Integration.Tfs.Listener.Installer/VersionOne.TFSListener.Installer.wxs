@@ -26,8 +26,6 @@
 
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
 
-    <iis:WebAppPool Id="NET_45" Name=".NET v4.5" />
-
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="$(var.PlatformProgramFilesFolder)">
         <Directory Id="VersionOne" Name="VersionOne">
@@ -85,11 +83,12 @@
             </Component>
             <Directory Id="WebDir" Name="web">
               <Component Id="ListenerWebSite" Guid="82E0F77A-ABBE-4247-A36D-468276FFFAB3">
+                <iis:WebAppPool Id="SiteAppPool" Name="$(var.WebAppPool)" Identity="applicationPoolIdentity" ManagedPipelineMode="Integrated" ManagedRuntimeVersion="v4.0" />
                 <CreateFolder />
                 <iis:WebSite Id="TFSListenerSite" AutoStart="yes" Description="VersionOne TFS Listener"
                              Directory="WebDir">
                   <iis:WebAddress Id='AllUnassigned' Port='[LISTEN_PORT]' />
-                  <iis:WebApplication Id='TFSListenerApp' WebAppPool='NET_45' Name='TFS Listener App' />
+                  <iis:WebApplication Id='TFSListenerApp' WebAppPool='SiteAppPool' Name='TFS Listener App' />
                 </iis:WebSite>
               </Component>
               

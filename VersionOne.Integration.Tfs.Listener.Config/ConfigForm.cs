@@ -484,7 +484,6 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             var index = identity.Name.IndexOf(backSlash, StringComparison.Ordinal);
             return identity.Name.Remove(0, (index + 1));
         }
-
         private void llClear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             tbResults.Clear();

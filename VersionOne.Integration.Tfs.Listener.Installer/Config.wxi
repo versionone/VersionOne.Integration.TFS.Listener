@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Include>
+  <?define WebAppPool = "VersionOne.Integration.Tfs.Listener.AppPool" ?>
   <?if $(var.Platform) = x64 ?>
-    <?define ProductName = "VersionOne TFS Listner (64-bit) for VSTS 2012" ?>
+    <?define ProductName = "VersionOne Integration Tfs Listener" ?>
     <?define Win64 = "yes" ?>
     <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
   <?else ?>
-    <?define ProductName = "VersionOne TFS Listner (32-bit) for VSTS 2012" ?>
+    <?define ProductName = "VersionOne Integration Tfs Listener" ?>
     <?define Win64 = "no" ?>
     <?define PlatformProgramFilesFolder = "ProgramFilesFolder" ?>
   <?endif ?>
