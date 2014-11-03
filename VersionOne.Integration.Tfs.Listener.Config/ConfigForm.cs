@@ -152,7 +152,8 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                     ProxyUsername = txtProxyUsername.Text,
                     ProxyPassword = txtProxyPassword.Text,
                     ProxyDomain = txtProxyDomain.Text,
-                    BaseListenerUrl = tbBaseUrl.Text
+                    BaseListenerUrl = tbBaseUrl.Text,
+                    WebSiteName = Utils.WebSiteName(ProtectData.Unprotect)
                 };
 
             var results = new ConfigurationProxy().Store(configToSave);
@@ -449,7 +450,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
 
         private void chkUseIntegrationAuth_CheckChanged(object sender, EventArgs e)
         {
-            ToggleV1Credentials();
+            //ToggleV1Credentials();
         }
 
         private byte _bit = 0;

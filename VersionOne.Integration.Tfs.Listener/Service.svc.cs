@@ -19,6 +19,7 @@ using VersionOne.Integration.Tfs.Listener.ServiceErrors;
 using Environment = System.Environment;
 using System.Globalization;
 using System.Reflection;
+using VersionOne.Integration.Tfs.Core.Security;
 
 namespace VersionOne.Integration.Tfs.Listener
 {
@@ -30,7 +31,7 @@ namespace VersionOne.Integration.Tfs.Listener
     {
         private readonly Lazy<V1Component> v1Component = new Lazy<V1Component>(() => 
             {
-                var component = new V1Component(Utils.GetV1Settings());
+                var component = new V1Component(Utils.GetV1Settings(ProtectData.Unprotect));
                 var validationResult = component.ValidateConnection();
 
                 if(!validationResult) 
@@ -138,7 +139,7 @@ namespace VersionOne.Integration.Tfs.Listener
         {
             Debug.instance().Write("Process Build Number " + e.BuildNumber + " from " + e.TeamProject);
 
-            var tfs = Utils.ConnectToTfs();
+            var tfs = Utils.ConnectToTfs(ProtectData.Unprotect);
             var buildStore = (IBuildServer) tfs.GetService(typeof(IBuildServer));
 
             var url = new Uri(e.Url);

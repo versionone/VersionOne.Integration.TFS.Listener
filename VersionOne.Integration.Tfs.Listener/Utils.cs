@@ -11,10 +11,10 @@ namespace VersionOne.Integration.Tfs.Listener
     /// </summary>
     public class Utils
     {
-        public static TfsTeamProjectCollection ConnectToTfs()
+        public static TfsTeamProjectCollection ConnectToTfs(Func<string,string> unprotect)
         {
 
-            var config = new ConfigurationProvider();
+            var config = new ConfigurationProvider(unprotect);
 
             var url = config.TfsUrl;
             var user = config.TfsUserName;
@@ -39,10 +39,10 @@ namespace VersionOne.Integration.Tfs.Listener
         /// Yuck.  Why?
         /// </summary>
         /// <returns></returns>
-        public static VersionOne.Integration.Tfs.Core.DataLayer.VersionOneSettings GetV1Settings()
+        public static VersionOne.Integration.Tfs.Core.DataLayer.VersionOneSettings GetV1Settings(Func<string,string> unprotect)
         {
 
-            var config = new ConfigurationProvider();
+            var config = new ConfigurationProvider(unprotect);
 
             return new VersionOne.Integration.Tfs.Core.DataLayer.VersionOneSettings 
                 {
@@ -53,7 +53,5 @@ namespace VersionOne.Integration.Tfs.Listener
                     ProxySettings = config.ProxySettings
                 };
         }
-
-
     }
 }

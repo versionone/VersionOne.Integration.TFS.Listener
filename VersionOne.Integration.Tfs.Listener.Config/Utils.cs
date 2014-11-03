@@ -3,6 +3,7 @@ using System.Net;
 using Microsoft.TeamFoundation.Client;
 using VersionOne.Integration.Tfs.Core.DataLayer;
 using VersionOne.Integration.Tfs.Core.Security;
+using VersionOne.Integration.Tfs.Core.DataLayer.Providers;
 
 namespace VersionOne.Integration.Tfs.Listener.Config {
     /// <summary>
@@ -28,6 +29,11 @@ namespace VersionOne.Integration.Tfs.Listener.Config {
             var tfsServer = new TfsTeamProjectCollection(new Uri(config.TfsUrl), creds);
             tfsServer.Authenticate();
             return tfsServer;
+        }
+
+        public static string WebSiteName(Func<string, string> unprotect)
+        {
+            return (new ConfigurationProvider(unprotect)).WebSiteName;
         }
     }
 }

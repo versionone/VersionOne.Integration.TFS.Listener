@@ -34,7 +34,8 @@ namespace VersionOne.Integration.Tfs.Listener
                     TfsWorkItemRegex = configProvider.TfsWorkItemRegex,
                     IsWindowsIntegratedSecurity = configProvider.IsWindowsIntegratedSecurity,
                     DebugMode = configProvider.DebugMode,
-                    BaseListenerUrl = configProvider.BaseListenerUrl.ToString()
+                    BaseListenerUrl = configProvider.BaseListenerUrl.ToString(),
+                    WebSiteName = configProvider.WebSiteName
                 };
             
             if (configProvider.ProxySettings.ProxyIsEnabled)
