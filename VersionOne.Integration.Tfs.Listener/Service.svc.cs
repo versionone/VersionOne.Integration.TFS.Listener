@@ -206,6 +206,7 @@ namespace VersionOne.Integration.Tfs.Listener
                             v1Component.Value.Save(primaryWorkitem);
                              */
                             v1Component.Value.MergeBuildRuns(primaryWorkitem, remove, new[] { buildRun });
+                            v1Component.Value.Save(primaryWorkitem);
                         }
                     }
 
