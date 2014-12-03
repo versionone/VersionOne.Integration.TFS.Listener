@@ -130,10 +130,11 @@ namespace VersionOne.Integration.Tfs.Listener
 
         private IEnumerable<PrimaryWorkitem> GetPrimaryWorkitemsInComment(string comment)
         {
-            var regex = new Regex(new ConfigurationProvider().TfsWorkItemRegex);
+            var regex = new Regex(new ConfigurationProvider(ProtectData.Unprotect).TfsWorkItemRegex);
             var numbers = regex.Matches(comment).Cast<Match>().Select(x => x.Value).ToList();
             return v1Component.Value.GetRelatedPrimaryWorkitems(numbers);
         }
+
 
         private void OnBuildCompletionEvent(BuildCompletionEvent2 e)
         {
@@ -197,12 +198,14 @@ namespace VersionOne.Integration.Tfs.Listener
                         foreach (var primaryWorkitem in v1Component.Value.GetPrimaryWorkitems(changeSet)) 
                         {
                             var remove = v1Component.Value.GetBuildRuns(primaryWorkitem, buildProject);
-                            
+                            /*
                             v1Component.Value.RemoveBuildRunsFromWorkitem(primaryWorkitem, remove);
                             v1Component.Value.Save(primaryWorkitem);
                             
                             v1Component.Value.AddBuildRunsToWorkitem(primaryWorkitem, new[]{buildRun});
                             v1Component.Value.Save(primaryWorkitem);
+                             */
+                            v1Component.Value.MergeBuildRuns(primaryWorkitem, remove, new[] { buildRun });
                         }
                     }
 
