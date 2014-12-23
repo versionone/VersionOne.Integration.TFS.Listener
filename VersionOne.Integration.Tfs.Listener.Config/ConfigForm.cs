@@ -159,6 +159,14 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             var results = new ConfigurationProxy().Store(configToSave);
             if(results != null && results[StatusKey.Status] == StatusCode.Ok)
             {
+                try
+                {
+                    ListenerURLTB.Text = new Uri(configToSave.BaseListenerUrl).Append(UriElements.ServiceName).ToString();
+                }
+                catch
+                {
+                    ListenerURLTB.Text = new Uri(new ConfigurationProxy().BaseListenerUrl).Append(UriElements.ServiceName).ToString();
+                }
                 UpdateStatusText("Save successful.", false);
                 return;
             }
@@ -329,7 +337,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
         {
             if (TfsServer != null)
             {
-                ListenerURLTB.Enabled = true;
+                //ListenerURLTB.Enabled = true;
                 TFSUpdateB.Enabled = true;
                 SubscriptionsLV.Enabled = true;
                 UnsubscribeB.Enabled = true;
@@ -366,7 +374,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 SubscriptionsLV.Items.Clear();
                 SubscriptionsLV.Items.Add(new ListViewItem("Not connected"));
                 SubscriptionsLV.Enabled = false;
-                ListenerURLTB.Enabled = false;
+                //ListenerURLTB.Enabled = false;
                 TFSUpdateB.Enabled = false;
                 UnsubscribeB.Enabled = false;
                 lblCurrentSubscriptions.Enabled = false;

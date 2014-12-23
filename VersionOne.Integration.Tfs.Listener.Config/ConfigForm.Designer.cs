@@ -353,6 +353,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             // 
             // ListenerURLTB
             // 
+            this.ListenerURLTB.Enabled = false;
             this.ListenerURLTB.Location = new System.Drawing.Point(7, 349);
             this.ListenerURLTB.Name = "ListenerURLTB";
             this.ListenerURLTB.Size = new System.Drawing.Size(435, 20);
