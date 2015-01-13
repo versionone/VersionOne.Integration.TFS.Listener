@@ -42,7 +42,7 @@ namespace VersionOne.Integration.Tfs.Listener
             {
                 config.ProxyDomain = configProvider.ProxySettings.Domain;
                 config.ProxyIsEnabled = configProvider.ProxySettings.ProxyIsEnabled;
-                config.ProxyUrl = configProvider.ProxySettings.Url.ToString();
+                config.ProxyUrl = configProvider.ProxySettings.Uri.ToString();
                 config.ProxyUsername = configProvider.ProxySettings.Username;
                 config.ProxyPassword = configProvider.ProxySettings.Password;
             }

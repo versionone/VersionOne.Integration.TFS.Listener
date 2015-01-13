@@ -326,7 +326,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             return new ProxyConnectionSettings 
             { 
                 ProxyIsEnabled = chkUseProxy.Checked, 
-                Url = new Uri(txtProxyUrl.Text), 
+                Uri = new Uri(txtProxyUrl.Text), 
                 Username = txtProxyUsername.Text, 
                 Password = txtProxyPassword.Text,
                 Domain = txtProxyDomain.Text
