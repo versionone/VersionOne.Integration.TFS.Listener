@@ -29,12 +29,12 @@ namespace VersionOne.Integration.Tfs.Listener
     [ServiceBehavior(AddressFilterMode = AddressFilterMode.Any)]
     public class Service : IService
     {
-        private readonly Lazy<V1Component> v1Component = new Lazy<V1Component>(() => 
+        private readonly Lazy<V1Component> v1Component = new Lazy<V1Component>(() =>
             {
                 var component = new V1Component(Utils.GetV1Settings(ProtectData.Unprotect));
                 var validationResult = component.ValidateConnection();
 
-                if(!validationResult) 
+                if (!validationResult)
                 {
                     throw new InvalidOperationException("VersionOne connection could not be established.");
                 }
@@ -45,22 +45,22 @@ namespace VersionOne.Integration.Tfs.Listener
         public void Notify(string eventXml, string tfsIdentityXml)
         {
             var assembly = Assembly.GetAssembly(typeof(Service)).GetName();
-            v1Component.Value.SetUpstreamUserAgent(string.Format("{0}/{1}",assembly.Name,assembly.Version));
+            v1Component.Value.SetUpstreamUserAgent(string.Format("{0}/{1}", assembly.Name, assembly.Version));
 
             Debug.instance().WriteNotificationMessage(eventXml, tfsIdentityXml);
 
             var buildEvent = false;
             var checkinEvent = false;
             var buildIndex = eventXml.IndexOf("BuildCompletionEvent2", 0, 255);
-            
-            if (buildIndex >= 0) 
+
+            if (buildIndex >= 0)
             {
                 buildEvent = true;
             }
 
             var checkinIndex = eventXml.IndexOf("CheckinEvent", 0, 255);
 
-            if(checkinIndex >= 0) 
+            if (checkinIndex >= 0)
             {
                 checkinEvent = true;
             }
@@ -77,33 +77,37 @@ namespace VersionOne.Integration.Tfs.Listener
                 }
             }
 
-            
-           if (checkinEvent)
-                {
-                    Debug.instance().Write("CheckIn Event");
-                    var checkInxs = new XmlSerializer(typeof(CheckinEvent));
-                    var sr = new StringReader(eventXml);
-                    var checkInData = checkInxs.Deserialize(sr) as CheckinEvent;
-                    
-                    if (checkInData != null) 
-                    {
-                        OnCheckInEvent(checkInData);
-                    }
-                }
 
-           if (buildEvent)
+            if (checkinEvent)
+            {
+                Debug.instance().Write("CheckIn Event");
+                var checkInxs = new XmlSerializer(typeof(CheckinEvent));
+                var sr = new StringReader(eventXml);
+                var checkInData = checkInxs.Deserialize(sr) as CheckinEvent;
+
+                if (checkInData != null)
                 {
-                    Debug.instance().Write("Build Event");
-                    var buildCompletionxs = new XmlSerializer(typeof(BuildCompletionEvent2));
-                    var sr = new StringReader(eventXml);
-                    var buildCompletionData = buildCompletionxs.Deserialize(sr) as BuildCompletionEvent2;
-                    
-                    if (buildCompletionData != null) 
-                    {
-                        OnBuildCompletionEvent(buildCompletionData);
-                    }
+                    if (checkInData.Comment.StartsWith("SOAP TEST:") ||
+                        checkInData.Comment.StartsWith("TFS TEST:"))
+                        Debug.instance().Write(checkInData.Comment);
+                    else
+                        OnCheckInEvent(checkInData);
                 }
-            
+            }
+
+            if (buildEvent)
+            {
+                Debug.instance().Write("Build Event");
+                var buildCompletionxs = new XmlSerializer(typeof(BuildCompletionEvent2));
+                var sr = new StringReader(eventXml);
+                var buildCompletionData = buildCompletionxs.Deserialize(sr) as BuildCompletionEvent2;
+
+                if (buildCompletionData != null)
+                {
+                    OnBuildCompletionEvent(buildCompletionData);
+                }
+            }
+
         }
 
         /// <summary>
@@ -112,19 +116,19 @@ namespace VersionOne.Integration.Tfs.Listener
         private void OnCheckInEvent(CheckinEvent e)
         {
             Debug.instance().Write("Process CheckIn Event for " + e.Number + " from " + e.TeamProject);
-            
+
             var primaryWorkItems = GetPrimaryWorkitemsInComment(e.Comment);
 
             var changeSet = v1Component.Value.CreateChangeSet(e.Owner + " " + e.CreationDate, "TFS:" + e.Number, e.Comment);
 
-            foreach (var clientArtifact in e.Artifacts.Cast<ClientArtifact>().Where(x => x.Type == "Changeset")) 
+            foreach (var clientArtifact in e.Artifacts.Cast<ClientArtifact>().Where(x => x.Type == "Changeset"))
             {
                 v1Component.Value.CreateLink(new Link(clientArtifact.Url, clientArtifact.Type, true), changeSet);
             }
 
             changeSet.PrimaryWorkitems = primaryWorkItems.Select(ValueId.FromEntity).ToArray();
             v1Component.Value.Save(changeSet);
-                
+
             Debug.instance().Write("Saved Changeset for " + e.Number);
         }
 
@@ -141,7 +145,7 @@ namespace VersionOne.Integration.Tfs.Listener
             Debug.instance().Write("Process Build Number " + e.BuildNumber + " from " + e.TeamProject);
 
             var tfs = Utils.ConnectToTfs(ProtectData.Unprotect);
-            var buildStore = (IBuildServer) tfs.GetService(typeof(IBuildServer));
+            var buildStore = (IBuildServer)tfs.GetService(typeof(IBuildServer));
 
             var url = new Uri(e.Url);
             var buildUri = HttpUtility.ParseQueryString(url.Query).Get("builduri");
@@ -155,14 +159,14 @@ namespace VersionOne.Integration.Tfs.Listener
             var reference = e.DefinitionPath;
             var index = reference.LastIndexOf("\\");
 
-            if(index >= 0) 
+            if (index >= 0)
             {
                 reference = reference.Substring(index + 1);
             }
 
             var results = v1Component.Value.GetBuildProjects(reference);
 
-            if(results.Count == 0) 
+            if (results.Count == 0)
             {
                 Debug.instance().Write("No results for reference " + reference);
             }
@@ -171,13 +175,13 @@ namespace VersionOne.Integration.Tfs.Listener
             {
                 var ts = DateTime.Parse(e.FinishTime, CultureInfo.InvariantCulture) - DateTime.Parse(e.StartTime, CultureInfo.InvariantCulture);
                 var buildRun = v1Component.Value.CreateBuildRun(buildProject, e.BuildNumber, DateTime.Parse(e.FinishTime, CultureInfo.InvariantCulture), ts.Seconds);
-                
+
                 var statuses = v1Component.Value.GetBuildRunStatuses();
                 var status = e.StatusCode == "Succeeded"
                                  ? statuses.First(x => x.Name == "Passed")
                                  : statuses.First(x => x.Name == "Failed");
                 buildRun.Status = status;
-                
+
                 v1Component.Value.CreateLink(new Link(e.Url, "TFS Build Results", true), buildRun);
 
                 var descriptionBuilder = new StringBuilder();
@@ -185,17 +189,17 @@ namespace VersionOne.Integration.Tfs.Listener
                 foreach (var csd in changeSetsData)
                 {
                     var changeSets = v1Component.Value.GetChangeSets("TFS:" + csd.ChangesetId);
-                    
+
                     foreach (var changeSet in changeSets)
                     {
-                        if(descriptionBuilder.Length > 0) 
+                        if (descriptionBuilder.Length > 0)
                         {
                             descriptionBuilder.Append(Environment.NewLine);
                         }
 
                         descriptionBuilder.Append(changeSet.Description);
-                        
-                        foreach (var primaryWorkitem in v1Component.Value.GetPrimaryWorkitems(changeSet)) 
+
+                        foreach (var primaryWorkitem in v1Component.Value.GetPrimaryWorkitems(changeSet))
                         {
                             var remove = v1Component.Value.GetBuildRuns(primaryWorkitem, buildProject);
                             /*
