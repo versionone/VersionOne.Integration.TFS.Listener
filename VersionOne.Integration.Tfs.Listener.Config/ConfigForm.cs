@@ -1,19 +1,24 @@
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Framework.Client;
 using System;
 using System.Collections;
 using System.DirectoryServices;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Principal;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Framework.Client;
+using VersionOne.Integration.Tfs.Core.DataLayer;
 using VersionOne.Integration.Tfs.Core.DTO;
 using VersionOne.Integration.Tfs.Core.Extensions;
-using VersionOne.Integration.Tfs.Core.Structures;
-using VersionOne.Integration.Tfs.Core.DataLayer;
 using VersionOne.Integration.Tfs.Core.Security;
-using Environment = System.Environment;
+using VersionOne.Integration.Tfs.Core.Structures;
+using HttpClient = System.Net.Http.HttpClient;
 
 namespace VersionOne.Integration.Tfs.Listener.Config
 {
@@ -33,6 +38,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             TFSConnectB.Click += TFSConnectB_Click;
             TFSUpdateB.Click += TFSUpdateB_Click;
             UnsubscribeB.Click += UnsubscribeB_Click;
+            TFSTestEventsB.Click += TFSTestEventsB_Click;
             chkUseProxy.CheckedChanged += chkUseProxy_CheckedChanged;
             UseIntegratedAuthenticationCB.CheckedChanged += chkUseIntegrationAuth_CheckChanged;
 
@@ -123,13 +129,15 @@ namespace VersionOne.Integration.Tfs.Listener.Config
 
         }
 
-        private void SetProxyRelatedFieldsEnabled(bool enabled) {
+        private void SetProxyRelatedFieldsEnabled(bool enabled)
+        {
             txtProxyUrl.Enabled = txtProxyUsername.Enabled = txtProxyPassword.Enabled = txtProxyDomain.Enabled = enabled;
         }
 
         #region Event Handlers
 
-        private void chkUseProxy_CheckedChanged(object sender, EventArgs e) {
+        private void chkUseProxy_CheckedChanged(object sender, EventArgs e)
+        {
             SetProxyRelatedFieldsEnabled(chkUseProxy.Checked);
         }
 
@@ -157,7 +165,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 };
 
             var results = new ConfigurationProxy().Store(configToSave);
-            if(results != null && results[StatusKey.Status] == StatusCode.Ok)
+            if (results != null && results[StatusKey.Status] == StatusCode.Ok)
             {
                 try
                 {
@@ -181,13 +189,13 @@ namespace VersionOne.Integration.Tfs.Listener.Config
         private void btnTestV1Connection_Click(object sender, EventArgs e)
         {
 
-            UpdateStatusText("Connecting to " + V1URLTB.Text+ "...", false);
+            UpdateStatusText("Connecting to " + V1URLTB.Text + "...", false);
 
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                var versionOneSettings = new VersionOneSettings() 
+                var versionOneSettings = new VersionOneSettings()
                 {
                     Path = V1URLTB.Text,
                     Username = V1UsernameTB.Text,
@@ -217,13 +225,13 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             tbResults.Refresh();
         }
 
-        private void DisplayConnectionValidationStatus(bool status, string message = null) 
+        private void DisplayConnectionValidationStatus(bool status, string message = null)
         {
-            if(!status) 
+            if (!status)
             {
                 UpdateStatusText(string.Format("Error connecting to {0}{1}", V1URLTB.Text, string.IsNullOrEmpty(message) ? string.Empty : ": " + message), true);
-            } 
-            else 
+            }
+            else
             {
                 UpdateStatusText(string.Format("Successfully connected to {0}", V1URLTB.Text), false);
             }
@@ -318,16 +326,16 @@ namespace VersionOne.Integration.Tfs.Listener.Config
 
         #endregion
 
-        private ProxyConnectionSettings GetProxySettings() 
+        private ProxyConnectionSettings GetProxySettings()
         {
 
             if (!chkUseProxy.Checked) return null;
 
-            return new ProxyConnectionSettings 
-            { 
-                ProxyIsEnabled = chkUseProxy.Checked, 
-                Uri = new Uri(txtProxyUrl.Text), 
-                Username = txtProxyUsername.Text, 
+            return new ProxyConnectionSettings
+            {
+                ProxyIsEnabled = chkUseProxy.Checked,
+                Uri = new Uri(txtProxyUrl.Text),
+                Username = txtProxyUsername.Text,
                 Password = txtProxyPassword.Text,
                 Domain = txtProxyDomain.Text
             };
@@ -341,17 +349,18 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 TFSUpdateB.Enabled = true;
                 SubscriptionsLV.Enabled = true;
                 UnsubscribeB.Enabled = true;
+                TFSTestEventsB.Enabled = true;
                 lblCurrentSubscriptions.Enabled = true;
                 lblListenerUrl.Enabled = true;
 
                 // Get Eventing Service
-                var eventService = (IEventService) TfsServer.GetService(typeof(IEventService));
+                var eventService = (IEventService)TfsServer.GetService(typeof(IEventService));
 
                 // Subscribe to event
                 const string tag = "VersionOneTFSServer";
                 SubscriptionsLV.Items.Clear();
-                
-                foreach (var s in eventService.GetEventSubscriptions(TfsServer.AuthorizedIdentity.Descriptor,tag))
+
+                foreach (var s in eventService.GetEventSubscriptions(TfsServer.AuthorizedIdentity.Descriptor, tag))
                 {
                     var item = new ListViewItem(s.EventType.ToString());
                     item.SubItems.Add(s.DeliveryPreference.Address);
@@ -362,11 +371,13 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 {
                     TFSUpdateB.Text = "Update Subscriptions";
                     UnsubscribeB.Enabled = true;
+                    TFSTestEventsB.Enabled = true;
                 }
                 else
                 {
                     TFSUpdateB.Text = "Subscribe";
                     UnsubscribeB.Enabled = false;
+                    TFSTestEventsB.Enabled = false;
                 }
             }
             else
@@ -377,6 +388,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 //ListenerURLTB.Enabled = false;
                 TFSUpdateB.Enabled = false;
                 UnsubscribeB.Enabled = false;
+                TFSTestEventsB.Enabled = false;
                 lblCurrentSubscriptions.Enabled = false;
                 lblListenerUrl.Enabled = false;
             }
@@ -384,13 +396,13 @@ namespace VersionOne.Integration.Tfs.Listener.Config
 
         public static void TFSUnsubscribe()
         {
-            if(TfsServer == null)
+            if (TfsServer == null)
             {
                 TfsServer = Utils.ConnectToTFS();
             }
 
             // Get Eventing Service
-            var eventService = (IEventService) TfsServer.GetService(typeof(IEventService));
+            var eventService = (IEventService)TfsServer.GetService(typeof(IEventService));
 
             const string tag = "VersionOneTFSServer";
 
@@ -403,18 +415,18 @@ namespace VersionOne.Integration.Tfs.Listener.Config
 
         public static void SetNetVersion(DirectoryEntry e, Version v)
         {
-            var version = "Framework\\v" + Environment.Version.Major + "." + Environment.Version.Minor + "." + Environment.Version.Build+"\\";
+            var version = "Framework\\v" + Environment.Version.Major + "." + Environment.Version.Minor + "." + Environment.Version.Build + "\\";
 
             var newMaps = new ArrayList();
             var versionRegex = new Regex(@"Framework\\v\d+\.\d+\.\d+\\", RegexOptions.IgnoreCase);
 
             var changed = false;
-            
+
             foreach (string str in e.Properties["ScriptMaps"])
             {
                 var temp = str;
                 var match = versionRegex.Match(str);
-                
+
                 if (match.Success)
                 {
                     if (match.Value != version)
@@ -425,8 +437,8 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 }
                 newMaps.Add(temp);
             }
-            
-            if(changed)
+
+            if (changed)
             {
                 e.Properties["ScriptMaps"].Value = newMaps.ToArray();
                 e.CommitChanges();
@@ -444,7 +456,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                 if (e.SchemaClassName == "IIsWebServer" && e.Properties["ServerComment"].Value.ToString() == folder)
                 {
                     SetNetVersion(e, Environment.Version);
-                    
+
                     foreach (DirectoryEntry f in e.Children)
                     {
                         if (f.SchemaClassName == "IIsWebVirtualDir")
@@ -453,7 +465,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
                         }
                     }
                 }
-            }    
+            }
         }
 
         private void chkUseIntegrationAuth_CheckChanged(object sender, EventArgs e)
@@ -482,7 +494,6 @@ namespace VersionOne.Integration.Tfs.Listener.Config
         /// <summary>
         /// Formats the user name without the domain name.
         /// </summary>
-        /// <param name="windowsIdentityName"></param>
         /// <returns></returns>
         private static string GetWindowsUserName()
         {
@@ -493,11 +504,140 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             var index = identity.Name.IndexOf(backSlash, StringComparison.Ordinal);
             return identity.Name.Remove(0, (index + 1));
         }
+
         private void llClear_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             tbResults.Clear();
             tbResults.BackColor = Color.Black;
         }
 
+        void TFSTestEventsB_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                var soapCheckinComment = string.Format("SOAP TEST:{0}", Guid.NewGuid());
+                var soapCheckinEventXml = string.Format(
+@"&lt;?xml version=""1.0"" encoding=""utf-16""?&gt;&#xD;
+&lt;CheckinEvent xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance""&gt;&#xD;
+  &lt;AllChangesIncluded&gt;true&lt;/AllChangesIncluded&gt;&#xD;
+  &lt;Subscriber&gt;v1deploy&lt;/Subscriber&gt;&#xD;
+  &lt;CheckinNotes /&gt;&#xD;
+  &lt;CheckinInformation /&gt;&#xD;
+  &lt;Artifacts&gt;&#xD;
+  &lt;/Artifacts&gt;&#xD;
+  &lt;Owner&gt;VM\v1deploy&lt;/Owner&gt;&#xD;
+  &lt;OwnerDisplay&gt;v1deploy&lt;/OwnerDisplay&gt;&#xD;
+  &lt;CreationDate&gt;2/4/2015 8:22:34 PM&lt;/CreationDate&gt;&#xD;
+  &lt;Comment&gt;{0}&lt;/Comment&gt;&#xD;
+  &lt;TimeZone&gt;Coordinated Universal Time&lt;/TimeZone&gt;&#xD;
+  &lt;TimeZoneOffset&gt;00:00:00&lt;/TimeZoneOffset&gt;&#xD;
+  &lt;TeamProject&gt;AnotherTeamProject&lt;/TeamProject&gt;&#xD;
+  &lt;PolicyOverrideComment /&gt;&#xD;
+  &lt;PolicyFailures /&gt;&#xD;
+  &lt;Title&gt;AnotherTeamProject Changeset 1: Test Comnent S-01001&lt;/Title&gt;&#xD;
+  &lt;ContentTitle&gt;Changeset 1: Test Comnent S-01001&lt;/ContentTitle&gt;&#xD;
+  &lt;Committer&gt;VM\v1deploy&lt;/Committer&gt;&#xD;
+  &lt;CommitterDisplay&gt;v1deploy&lt;/CommitterDisplay&gt;&#xD;
+  &lt;Number&gt;1&lt;/Number&gt;&#xD;
+&lt;/CheckinEvent&gt;", soapCheckinComment);
+
+                var soapXml = string.Format(
+@"<s:Envelope xmlns:s=""http://www.w3.org/2003/05/soap-envelope"" xmlns:a=""http://www.w3.org/2005/08/addressing"">
+    <s:Header>
+        <a:Action s:mustUnderstand=""1"">http://schemas.microsoft.com/TeamFoundation/2005/06/Services/Notification/03/Notify</a:Action>
+        <a:MessageID>urn:uuid:bcd69124-7da7-4e43-8b8f-427bf07731cf</a:MessageID>
+        <a:ReplyTo>
+        <a:Address>http://www.w3.org/2005/08/addressing/anonymous</a:Address>
+        </a:ReplyTo>
+        <a:To s:mustUnderstand=""1"">{0}</a:To>
+    </s:Header>
+    <s:Body>
+        <Notify xmlns=""http://schemas.microsoft.com/TeamFoundation/2005/06/Services/Notification/03"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
+            <eventXml>{1}</eventXml>
+            <tfsIdentityXml />
+        </Notify>
+    </s:Body>
+</s:Envelope>", ListenerURLTB.Text, soapCheckinEventXml);
+
+                // Call listener web service with dummy checkin event
+                UpdateStatusText("Making a test call to the TFS Listener directly and through TFS", false);
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Add("SOAPAction",
+                        "http://schemas.microsoft.com/TeamFoundation/2005/06/Services/Notification/03/Notify");
+                    var stringContent = new StringContent(soapXml, Encoding.UTF8, "application/soap+xml");
+                    using (var response = httpClient.PostAsync(ListenerURLTB.Text, stringContent).Result)
+                    {
+                        //var soapResponse = response.Content.ReadAsStringAsync().Result;
+                        if (response.IsSuccessStatusCode)
+                            if (ValidateCheckinEventTest(soapCheckinComment))
+                                UpdateStatusText("Direct connection to the TFS Listener was successful", false);
+                            else
+                                UpdateStatusText("Direct connection to the TFS Listener has failed", true);
+                        else
+                            UpdateStatusText(response.ReasonPhrase, true);
+                    }
+                }
+
+                // Raise TFS dummy checkin event
+                var tfsCheckinComment = string.Format("TFS TEST:{0}", Guid.NewGuid());
+                var tfsCheckinEventXml = string.Format(
+@"<?xml version=""1.0"" encoding=""utf-16""?>
+<CheckinEvent xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
+  <AllChangesIncluded>true</AllChangesIncluded>
+  <Subscriber>v1deploy</Subscriber>
+  <CheckinNotes />
+  <CheckinInformation />
+  <Artifacts>
+  </Artifacts>
+  <Owner>VM\v1deploy</Owner>
+  <OwnerDisplay>v1deploy</OwnerDisplay>
+  <CreationDate>2/4/2015 8:22:34 PM</CreationDate>
+  <Comment>{0}</Comment>
+  <TimeZone>Coordinated Universal Time</TimeZone>
+  <TimeZoneOffset>00:00:00</TimeZoneOffset>
+  <TeamProject>AnotherTeamProject</TeamProject>
+  <PolicyOverrideComment />
+  <PolicyFailures />
+  <Title>AnotherTeamProject Changeset 1: Test Comnent S-01001</Title>
+  <ContentTitle>Changeset 1: Test Comnent S-01001</ContentTitle>
+  <Committer>VM\v1deploy</Committer>
+  <CommitterDisplay>v1deploy</CommitterDisplay>
+  <Number>1</Number>
+</CheckinEvent>", tfsCheckinComment);
+
+                var eventService = (IEventService)TfsServer.GetService(typeof(IEventService));
+                eventService.FireEvent(tfsCheckinEventXml);
+
+                var tokenSource = new CancellationTokenSource();
+                var token = tokenSource.Token;
+                var task = Task.Run(() =>
+                {
+                    while (!token.IsCancellationRequested &&
+                        !ValidateCheckinEventTest(tfsCheckinComment))
+                        Thread.Sleep(1000);
+                }, token);
+                if (task.Wait(30000, tokenSource.Token))
+                    UpdateStatusText("TFS connection to the TFS Listener was successful", false);
+                else
+                {
+                    tokenSource.Cancel();
+                    UpdateStatusText("TFS connection to the TFS Listener has failed", true);
+                }
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private bool ValidateCheckinEventTest(string checkinComment)
+        {
+            var filePath = Path.Combine(Paths.LoggingPath, "V1Debug.txt");
+            return File.Exists(filePath) &&
+                   File.ReadAllLines(filePath).Any(line => line.EndsWith(checkinComment));
+        }
     }
 }

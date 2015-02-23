@@ -50,6 +50,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             this.lblVersionOneUrl = new System.Windows.Forms.Label();
             this.V1URLTB = new System.Windows.Forms.TextBox();
             this.tpTfsServer = new System.Windows.Forms.TabPage();
+            this.TFSTestEventsB = new System.Windows.Forms.Button();
             this.SubscriptionsLV = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -279,6 +280,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             // 
             // tpTfsServer
             // 
+            this.tpTfsServer.Controls.Add(this.TFSTestEventsB);
             this.tpTfsServer.Controls.Add(this.SubscriptionsLV);
             this.tpTfsServer.Controls.Add(this.UnsubscribeB);
             this.tpTfsServer.Controls.Add(this.lblListenerUrl);
@@ -300,6 +302,15 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             this.tpTfsServer.TabIndex = 1;
             this.tpTfsServer.Text = "TFS Server";
             this.tpTfsServer.UseVisualStyleBackColor = true;
+            // 
+            // TFSTestEventsB
+            // 
+            this.TFSTestEventsB.Location = new System.Drawing.Point(287, 378);
+            this.TFSTestEventsB.Name = "TFSTestEventsB";
+            this.TFSTestEventsB.Size = new System.Drawing.Size(135, 23);
+            this.TFSTestEventsB.TabIndex = 30;
+            this.TFSTestEventsB.Text = "Test Events";
+            this.TFSTestEventsB.UseVisualStyleBackColor = true;
             // 
             // SubscriptionsLV
             // 
@@ -326,9 +337,9 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             // 
             // UnsubscribeB
             // 
-            this.UnsubscribeB.Location = new System.Drawing.Point(157, 378);
+            this.UnsubscribeB.Location = new System.Drawing.Point(147, 378);
             this.UnsubscribeB.Name = "UnsubscribeB";
-            this.UnsubscribeB.Size = new System.Drawing.Size(157, 23);
+            this.UnsubscribeB.Size = new System.Drawing.Size(135, 23);
             this.UnsubscribeB.TabIndex = 28;
             this.UnsubscribeB.Text = "Unsubscribe";
             this.UnsubscribeB.UseVisualStyleBackColor = true;
@@ -346,7 +357,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             // 
             this.TFSUpdateB.Location = new System.Drawing.Point(7, 378);
             this.TFSUpdateB.Name = "TFSUpdateB";
-            this.TFSUpdateB.Size = new System.Drawing.Size(144, 23);
+            this.TFSUpdateB.Size = new System.Drawing.Size(135, 23);
             this.TFSUpdateB.TabIndex = 25;
             this.TFSUpdateB.Text = "Subscribe";
             this.TFSUpdateB.UseVisualStyleBackColor = true;
@@ -505,7 +516,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             this.btnSaveAllSettings.Location = new System.Drawing.Point(153, 502);
             this.btnSaveAllSettings.Name = "btnSaveAllSettings";
             this.btnSaveAllSettings.Size = new System.Drawing.Size(145, 28);
-            this.btnSaveAllSettings.TabIndex = 9;
+            this.btnSaveAllSettings.TabIndex = 32;
             this.btnSaveAllSettings.Text = "Save All Settings";
             this.btnSaveAllSettings.UseVisualStyleBackColor = true;
             // 
@@ -527,7 +538,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
             this.llClear.Location = new System.Drawing.Point(420, 515);
             this.llClear.Name = "llClear";
             this.llClear.Size = new System.Drawing.Size(31, 13);
-            this.llClear.TabIndex = 12;
+            this.llClear.TabIndex = 34;
             this.llClear.TabStop = true;
             this.llClear.Text = "Clear";
             this.llClear.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llClear_LinkClicked);
@@ -638,6 +649,7 @@ namespace VersionOne.Integration.Tfs.Listener.Config
         private System.Windows.Forms.TextBox tbBaseUrl;
         private System.Windows.Forms.Label lblTFSListenerUrl;
         private System.Windows.Forms.Button btnSetBaseListenerUrl;
+        private System.Windows.Forms.Button TFSTestEventsB;
     }
 }
 
