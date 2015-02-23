@@ -48,8 +48,8 @@
                     DiskId="1" Vital="yes" KeyPath="yes" />
             </Component>
             <Component Id="VersionOneTFSDataLayer" Guid="D79297A6-B819-4065-81D4-FAC039CA702E">
-              <File Id="VersionOneServerConnectorDLL"
-                    Name="VersionOne.ServerConnector.dll"
+              <File Id="VersionOneIntegrationTFSServerConnectorDLL"
+                    Name="VersionOne.Integration.TFS.ServerConnector.dll"
                     Source ="$(var.VersionOne.Integration.Tfs.Listener.TargetDir)"
                     DiskId="1" Vital="yes" KeyPath="no" />
               <File Id="VersionOneServiceHostCoreDLL"
