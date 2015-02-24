@@ -33,12 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FParsec, Version=1.0.0.0, Culture=neutral, PublicKeyToken=40ccfc0a09edbb5d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="FParsec">
       <HintPath>..\packages\FParsec.1.0.1\lib\net40-client\FParsec.dll</HintPath>
     </Reference>
-    <Reference Include="FParsecCS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=40ccfc0a09edbb5d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="FParsecCS">
       <HintPath>..\packages\FParsec.1.0.1\lib\net40-client\FParsecCS.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Data, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -50,15 +48,13 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Administration.7.0.0.0\lib\net20\Microsoft.Web.Administration.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="NSpec">
@@ -67,8 +63,7 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="OAuth2Client, Version=1.6.0.2561, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="OAuth2Client">
       <HintPath>..\packages\OAuth2Client.1.6.0.2561\lib\net45\OAuth2Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -83,23 +78,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="VersionOne.Integration.Tfs.Core, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="VersionOne.Integration.Tfs.Core">
       <HintPath>..\packages\VersionOne.Integration.Tfs.Core.4.0.2.0\lib\net451\VersionOne.Integration.Tfs.Core.dll</HintPath>
     </Reference>
     <Reference Include="VersionOne.Integration.TFS.ServerConnector">
       <HintPath>..\packages\VersionOne.Integration.TFS.ServerConnector.1.1.0.0\lib\net451\VersionOne.Integration.TFS.ServerConnector.dll</HintPath>
     </Reference>
-    <Reference Include="VersionOne.Parsers, Version=1.1.14195.67, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="VersionOne.Parsers">
       <HintPath>..\packages\VersionOne.Parsers.1.1.14195.67\lib\net45\VersionOne.Parsers.dll</HintPath>
     </Reference>
-    <Reference Include="VersionOne.SDK.APIClient, Version=14.1.1.295, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="VersionOne.SDK.APIClient">
       <HintPath>..\packages\VersionOne.SDK.APIClient.14.1.1.295\lib\net45\VersionOne.SDK.APIClient.dll</HintPath>
     </Reference>
-    <Reference Include="VersionOne.ServiceHost.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="VersionOne.ServiceHost.Core">
       <HintPath>..\packages\VersionOne.ServiceHost.Core.1.1.0.0\lib\net451\VersionOne.ServiceHost.Core.dll</HintPath>
     </Reference>
   </ItemGroup>

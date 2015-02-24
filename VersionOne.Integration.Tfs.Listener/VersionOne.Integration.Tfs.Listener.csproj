@@ -105,7 +105,7 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Administration.7.0.0.0\lib\net20\Microsoft.Web.Administration.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -189,12 +189,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\VersionOne.Integration.Tfs.Core.4.0.2.0\lib\net451\VersionOne.Integration.Tfs.Core.dll</HintPath>
     </Reference>
-    <Reference Include="VersionOne.Integration.TFS.ServerConnector">
+    <Reference Include="VersionOne.Integration.TFS.ServerConnector, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\VersionOne.Integration.TFS.ServerConnector.1.1.0.0\lib\net451\VersionOne.Integration.TFS.ServerConnector.dll</HintPath>
     </Reference>
-    <Reference Include="VersionOne.Parsers">
+    <Reference Include="VersionOne.Parsers, Version=1.1.14195.67, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\VersionOne.Parsers.1.1.14195.67\lib\net45\VersionOne.Parsers.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="VersionOne.SDK.APIClient, Version=14.1.1.295, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
