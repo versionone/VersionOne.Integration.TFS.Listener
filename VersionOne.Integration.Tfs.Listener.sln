@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionOne.Integration.Tfs.Listener", "VersionOne.Integration.Tfs.Listener\VersionOne.Integration.Tfs.Listener.csproj", "{7A156D60-834A-49D7-BD37-3B7AEAB7CD1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionOne.Integration.Tfs.Listener.Tests", "VersionOne.Integration.Tfs.Listener.Tests\VersionOne.Integration.Tfs.Listener.Tests.csproj", "{929EB8BE-347B-4D0B-B0CD-530BAD209D3D}"
