@@ -18,7 +18,7 @@
         <Component Id="SiteBin" Guid="{B61F8CA4-457D-423D-AC00-667F525ABA6B}">
           <File Id="VersionOneTfsListenerDLL" Name="VersionOne.Integration.Tfs.Listener.dll"/>
           <File Id="SiteVersionOneSDKAPIClientDLL" Name="VersionOne.SDK.APIClient.dll"/>
-          <File Id="SiteVersionOneIntegrationTFSServerConnectorDLL" Name="VersionOne.Integration.TFS.ServerConnector.dll"/>
+          <File Id="SiteVersionOneIntegrationTfsServerConnectorDLL" Name="VersionOne.Integration.Tfs.ServerConnector.dll"/>
           <File Id="FSharp.Data_SiteBin" Name="FSharp.Data.dll"/>
           <File Id="OAuth2Client_SiteBin" Name="OAuth2Client.dll"/>
           <File Id="VersionOne.Parsers_SiteBin" Name="VersionOne.Parsers.dll"/>

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 using Microsoft.TeamFoundation.VersionControl.Common;
 using Microsoft.TeamFoundation.Build.Client;
-using VersionOne.Integration.TFS.ServerConnector.Entities;
+using VersionOne.Integration.Tfs.ServerConnector.Entities;
 using VersionOne.Integration.Tfs.Core.DataLayer;
 using VersionOne.Integration.Tfs.Core.DataLayer.Providers;
 using VersionOne.Integration.Tfs.Listener.Interfaces;
