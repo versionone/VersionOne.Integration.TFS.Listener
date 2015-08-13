@@ -6,7 +6,7 @@
   <?include $(sys.CURRENTDIR)\Config.wxi ?>
 
   <Product Name="VersionOne TFS Listener"
-           Version="3.0.1"
+           Version="4.0.3.0"
            Manufacturer="VersionOne"
            Id="70439564-5E37-4B38-AEF4-91D86F50B282"
            UpgradeCode="003F3FE8-9A6D-445F-9ACB-5479FAD77A7D"
